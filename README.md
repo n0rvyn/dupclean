@@ -14,12 +14,10 @@ A simple tool to delete duplicate files.
 ## Usage
 ```bazaar
 Usage: dupclean.py [action] [options] [filter] [path]
-       dupclean.py -h | --help
+       dupclean.py [-h | --help]           display this help message and exit
 
-# PATH:  The last parameter is considered as working folder by default.
 Path:
        -f, --folder                     the working directory
-       -h, --help                       display this help message and exit
 
 Actions:
        --run                            analyze and delete the files marked as 'burn'
@@ -32,18 +30,22 @@ Options:
        -t, --st-time ST_TIME            st_mtime'(default), 'st_atime', or 'st_ctime'
        -p, --priority PRIORITY          choose 'oldest' or 'latest'(default) st_time to hold the file
        -b, --backup DIRECTORY           moving files to DIRECTORY instead of delete directly
+       --force                          deleting files without prompt (default: rm -ri)
       
 Filter:
-       --key-to-hold "K1, K2..."        keywords to hold the file, "key1, key2..."
-       --key-to-burn "K1, K2..."        keywords to burn the file
-       --suffix-to-hold "K1, K2..."     suffix to hold the file
-       --suffix-to-burn "K1, K2..."     suffix to burn the file
-       --key-to-path-hold "K1, K2..."   keywords to hold the file by file's absolute path.
-       --key-to-path-burn "K1, K2..."   keywords to burn the file by file's absolute path.
+       --key-to-hold "K1,K2..."        keywords to hold the file, "key1, key2..."
+       --key-to-burn "K1,K2..."        keywords to burn the file
+       --suffix-to-hold "K1,K2..."     suffix to hold the file
+       --suffix-to-burn "K1,K2..."     suffix to burn the file
+       --key-to-path-hold "K1,K2..."   keywords to hold the file by file's absolute path
+       --key-to-path-burn "K1,K2..."   keywords to burn the file by file's absolute path
+
+Warning: 
+       Do NOT leave blank after ',' for specifying more than 2 keywords, 
+       because the BLANK will be considered as the first part of the next keyword. 
        
 Example:
        dupclean.py -r -c 1 --key-to-burn 'test,log' --suffix-to-burn '.bak,.log' /path/to/folder
-
 ```
 
 ## Example
