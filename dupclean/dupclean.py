@@ -127,7 +127,7 @@ for opt, arg in opts:
         except TypeError as e:
             raise e
     elif opt in ['-p', '--priority']:
-        if not arg in ['latest', 'oldest']:
+        if arg not in ['latest', 'oldest']:
             raise TypeError
         priority = arg
     elif opt in ['--key-to-hold']:

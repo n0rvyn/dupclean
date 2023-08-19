@@ -86,7 +86,6 @@ class Filter(object):
                 filename = path.basename(loc)
                 if keyword and keyword in filename:
                     self.filedict[checksum]['locations'][loc]['mode'] = mode
-                    print(keyword)
                 if suffix and filename.endswith(suffix):
                     self.filedict[checksum]['locations'][loc]['mode'] = mode
 
