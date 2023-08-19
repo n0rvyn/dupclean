@@ -88,7 +88,7 @@ try:
     opts, args = getopt(options,
                         'ha:t:c:p:f:rb:',
                         [
-                            'show', 'run', 'help', 'hash-algorithm=', 'st-time=', 'priority', 'count', 'folder',
+                            'run', 'help', 'hash-algorithm=', 'st-time=', 'priority', 'count', 'folder',
                             'recursively',
                             'key-to-hold=', 'key-to-burn=', 'suffix-to-hold=', 'suffix-to-burn=',
                             'key-to-path-hold=', 'key-to-path-burn=', 'backup='])

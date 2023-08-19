@@ -40,6 +40,6 @@ Time_Priority = Literal[
 
 
 # the index of 'st_atime', 'st_mtime' and 'st_ctime' in method: os.stat()
-ST_Index = {'st_atime': 8,
-            'st_mtime': 9,
-            'st_ctime': 10}
+ST_Index = {'st_atime': 7,
+            'st_mtime': 8,
+            'st_ctime': 9}
