@@ -1,101 +1,146 @@
-# 文件消重脚本
-
+# Duplicate Clean
 A set of scripts to delete duplicate files.  
-本来是‘a set’，import来import去太麻烦，先弄个简版。
 
-## 目录
-- [适用平台](#requirement)
-- [用法](#usage)
+## Table of Content
+- [Compatible Platform](#compatible-platform)
+- [Usage](#usage)
+- [Example](#example)
 
 
-## 适用平台
+## Compatible Platform
 - macOS
 - Linux
 
-## 用法
+## Usage
 ```bazaar
-    Usage: duplicateclean.py [options] PATH
+Usage: dupclean.py [action] [options] [filter] [path]
+       dupclean.py -h | --help
 
-    Options:
-          --dryrun             analyze and shows the result, delete nothing
+# PATH:  The last parameter is considered as working folder by default.
+Path:
+       -f, --folder                     the working directory
+       -h, --help                       display this help message and exit
 
-          -h, --help           display this help message and exit
+Actions:
+       --run                            analyze and delete the files marked as 'burn'
 
-          -f, --folder         target directory to analyze, default '.'
+Options:
+       -r, --recursively                recursively analyze entire directories
+       -a, --hash-algo HASH_ALGORITHM   hashing algorithm to identifying the file, 'sha512' or 'md5'(default)
+       -c, --count COUNT                number of copies to hold even all duplicate met the filter
+                                        depends on the value of '--st-time' and '--priority'
+       -t, --st-time ST_TIME            st_mtime'(default), 'st_atime', or 'st_ctime'
+       -p, --priority PRIORITY          choose 'oldest' or 'latest'(default) st_time to hold the file
+       -b, --backup DIRECTORY           moving files to DIRECTORY instead of delete directly
+      
+Filter:
+       --key-to-hold "K1, K2..."        keywords to hold the file, "key1, key2..."
+       --key-to-burn "K1, K2..."        keywords to burn the file
+       --suffix-to-hold "K1, K2..."     suffix to hold the file
+       --suffix-to-burn "K1, K2..."     suffix to burn the file
+       --key-to-path-hold "K1, K2..."   keywords to hold the file by file's absolute path.
+       --key-to-path-burn "K1, K2..."   keywords to burn the file by file's absolute path.
+       
+Example:
+       dupclean.py -r -c 1 --key-to-burn 'test,log' --suffix-to-burn '.bak,.log' /path/to/folder
 
-          -r, --recursively    recursively analyze entire directories
-          -a, --hash-algorithm 'sha512' or 'md5'(default)
-
-          -c, --count          number of copies to hold even all duplicate met the filter
-                               depends on the value of '--st-time' and '--priority'
-          -t, --st-time        'st_mtime', 'st_atime', or 'st_ctime'
-          -p, --priority       choose 'oldest' or 'latest' st_time to hold the file
-
-          --key-to-hold        keywords to hold the file, "key1, key2..."
-          --key-to-burn        keywords to burn the file
-          --suffix-to-hold     suffix to hold the file
-          --suffix-to-burn     suffix to burn the file
-
-          --key-to-path-hold   keywords to hold the file by file's absolute path.
-          --key-to-path-burn   keywords to burn the file by file's absolute path.
 ```
 
-## Example - 示例
+## Example
 
-### 以md5值为依据列出重复文件
+### Manually creating duplicate files
+#### 1. Creating a directory named 'test' under '/tmp'
 ```bash
-$ ./duplicateclean.py --dryrun -r -p oldest  -f ./test
-checksum:  fc87c7dea6d66d0a61f9806911848b9a
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/same_as_fileoperator.py'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/fileoperator.py'
-checksum:  4e58964ad5ebfdbf50a679861490ebb1
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py'
-	 hold  1692100162 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak.230846.py'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py 2'
+mkdir /tmp/test
 ```
 
-### 添加标记删除关键字和后缀进行筛选
+#### 2. Coping `dupclean` source files to directory `/tmp/test`
 ```bash
-$ ./duplicateclean.py --dryrun -r -p oldest  -f ./test --key-to-burn 'same_as,mongo' --suffix-to-burn '.bak, 2'
-checksum:  fc87c7dea6d66d0a61f9806911848b9a
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/same_as_fileoperator.py'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/fileoperator.py'
-checksum:  4e58964ad5ebfdbf50a679861490ebb1
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py'
-	 burn  1692100162 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak.230846.py'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py 2'
+cp -r /path/to/dupclean/ /tmp/test/
 ```
 
-### 至少保留一个副本'-c 1'， 保留时间策略'-p latest'，最新优先
+#### 3. Creating duplicate files
 ```bash
-$ ./duplicateclean.py --dryrun -r -p latest -f ./test --key-to-burn 'same_as,mongo' --suffix-to-burn '.bak, 2' -c 1
-checksum:  fc87c7dea6d66d0a61f9806911848b9a
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/same_as_fileoperator.py'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/fileoperator.py'
-checksum:  4e58964ad5ebfdbf50a679861490ebb1
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py'
-	 hold  1692100162 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak.230846.py'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py 2'
+for f in `ls -1 /tmp/test/modules/`; do cp /tmp/test/modules/{"$f","$f".bak}; done
 ```
 
-### 以'sha512'值为依据重新计算重复文件
+### Downloading `dupclean` bin file and coping to `/tmp`
 ```bash
-$ ./duplicateclean.py --dryrun -r -p latest -f ./test --key-to-burn 'same_as,mongo' --suffix-to-burn '.bak, 2' -c 1 --hash-algo 'sha512'
-checksum:  3ea7013447d2a726e548db65075313035185fd2debbfbb4ac95f3dd710cc39d8d933ea515a81719a1d20e3c41ca96b0d3419c502bb772571b8918967fee49a9a
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/same_as_fileoperator.py'
-	 hold  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/fileoperator.py'
-checksum:  e7035c79fdb52282ffc926c21f61669bd35bbb6fa7cb7cb5eac1683a4cf8df5b8483ae58fed1caebb0381d36021df886886a1675c203c4873f8da69463cddf0b
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py'
-	 hold  1692100162 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak.230846.py'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.bak'
-	 burn  1692100039 '/Users/beyan/Documents/Scripts/40-Python/duplicateclean-0.0.1/test/mongodb.py 2'
+cp /path/to/dupclean /tmp
 ```
 
-## 下载地址
+### Listing and deleting duplicate files with `dupclean`
+
+#### 1. Listing files
+```bash
+$ /tmp/dupclean -r -f /tmp/test
+---------------------------------------- Duplicate Results ----------------------------------------
+checksum:  6e5e4d9714608714ce952f5c42555b3d
+         hold  1692413845 '/tmp/test/modules/__init__.py'
+         hold  1692414154 '/tmp/test/modules/__init__.py.bak'
+checksum:  d55ecb1291a11d396eccfaadfb9133f5
+         hold  1692413845 '/tmp/test/modules/filter.py'
+         hold  1692414154 '/tmp/test/modules/filter.py.bak'
+checksum:  ed0178bb65e6747a77017ff3fccd26af
+         hold  1692413845 '/tmp/test/modules/datatype.py'
+         hold  1692414154 '/tmp/test/modules/datatype.py.bak'
+checksum:  9a20e19c2f93f5e689408d0994ad4b2e
+         hold  1692413845 '/tmp/test/modules/listduplicate.py'
+         hold  1692414154 '/tmp/test/modules/listduplicate.py.bak'
+---------------------------------------- Duplicate Results ----------------------------------------
+Need taking action, followed with "--run" parameter.
+You can also move the files to directory followed by "-b" or "--backup" instead of deleting directly.
+
+```
+
+#### 2. Adding `keyword` and `suffix` to mark files as `burn` or `hold`
+```bash
+$ /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' 
+---------------------------------------- Duplicate Results ----------------------------------------
+checksum:  6e5e4d9714608714ce952f5c42555b3d
+         burn  1692413845 '/tmp/test/modules/__init__.py'
+         burn  1692414154 '/tmp/test/modules/__init__.py.bak'
+checksum:  d55ecb1291a11d396eccfaadfb9133f5
+         hold  1692413845 '/tmp/test/modules/filter.py'
+         burn  1692414154 '/tmp/test/modules/filter.py.bak'
+checksum:  ed0178bb65e6747a77017ff3fccd26af
+         hold  1692413845 '/tmp/test/modules/datatype.py'
+         burn  1692414154 '/tmp/test/modules/datatype.py.bak'
+checksum:  9a20e19c2f93f5e689408d0994ad4b2e
+         hold  1692413845 '/tmp/test/modules/listduplicate.py'
+         burn  1692414154 '/tmp/test/modules/listduplicate.py.bak'
+---------------------------------------- Duplicate Results ----------------------------------------
+Need taking action, followed with "--run" parameter.
+You can also move the files to directory followed by "-b" or "--backup" instead of deleting directly.
+```
+
+#### 3. Setting `-c 1` option to `hold` at least on copy of each file
+Both of origin and copy of `__init__` are marked as *burn* from last output. 
+
+After adding `-c 1` option:
+```bash
+beyan@MacHome /tmp/test/modules $ /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' -c 1
+---------------------------------------- Duplicate Results ----------------------------------------
+checksum:  6e5e4d9714608714ce952f5c42555b3d
+         burn  1692413845 '/tmp/test/modules/__init__.py'
+         hold  1692414154 '/tmp/test/modules/__init__.py.bak'
+checksum:  d55ecb1291a11d396eccfaadfb9133f5
+         hold  1692413845 '/tmp/test/modules/filter.py'
+         burn  1692414154 '/tmp/test/modules/filter.py.bak'
+checksum:  ed0178bb65e6747a77017ff3fccd26af
+         hold  1692413845 '/tmp/test/modules/datatype.py'
+         burn  1692414154 '/tmp/test/modules/datatype.py.bak'
+checksum:  9a20e19c2f93f5e689408d0994ad4b2e
+         hold  1692413845 '/tmp/test/modules/listduplicate.py'
+         burn  1692414154 '/tmp/test/modules/listduplicate.py.bak'
+---------------------------------------- Duplicate Results ----------------------------------------
+Need taking action, followed with "--run" parameter.
+You can also move the files to directory followed by "-b" or "--backup" instead of deleting directly.
+```
+
+#### 4. Deleting files with `--run` action or just move to backup directory with `-b /path/to/backup --run` 
+```bash
+mkdir /tmp/backup
+/tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' -c 1 -b /tmp/backup --run
+```
+
