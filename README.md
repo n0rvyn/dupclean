@@ -144,3 +144,5 @@ mkdir /tmp/backup
 /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' -c 1 -b /tmp/backup --run
 ```
 
+## Code URL
+[GitHub](https://github.com/n0rvyn/dupclean)

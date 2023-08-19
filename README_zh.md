@@ -87,7 +87,6 @@ You can also move the files to directory followed by "-b" or "--backup" instead 
 
 ```
 
-#### 2. A `keyword` and `suffix` to mark files as `burn` or `hold`
 #### 2. 通过添加关键字和后缀来标记文件目录为`burn`或者`hold`
 ```bash
 $ /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' 
@@ -139,3 +138,5 @@ mkdir /tmp/backup
 /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' -c 1 -b /tmp/backup --run
 ```
 
+## 源码地址
+[GitHub](https://github.com/n0rvyn/dupclean)
