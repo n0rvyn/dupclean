@@ -1,5 +1,5 @@
 # Duplicate Clean
-A set of scripts to delete duplicate files.  
+A simple tool to delete duplicate files.  
 
 ## Table of Content
 - [Compatible Platform](#compatible-platform)
@@ -119,7 +119,7 @@ Both of origin and copy of `__init__` are marked as *burn* from last output.
 
 After adding `-c 1` option:
 ```bash
-beyan@MacHome /tmp/test/modules $ /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' -c 1
+$ /tmp/dupclean -r -f /tmp/test --suffix-to-burn '.bak' --key-to-burn 'init' -c 1
 ---------------------------------------- Duplicate Results ----------------------------------------
 checksum:  6e5e4d9714608714ce952f5c42555b3d
          burn  1692413845 '/tmp/test/modules/__init__.py'
