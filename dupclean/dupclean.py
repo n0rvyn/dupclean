@@ -46,13 +46,13 @@ key_to_path_burn = []
 
 USAGE = f"""
 Usage: {filename} [action] [options] [filter] [path]
-       {filename} [-h | --help]           display this help message and exit
 
 Path:
        -f, --folder                     the working directory
 
 Actions:
        --run                            analyze and delete the files marked as 'burn'
+       -h, --help                       display this help message and exit
 
 Options:
        -r, --recursively                recursively analyze entire directories
@@ -65,12 +65,12 @@ Options:
        --force                          deleting files without prompt (default: rm -ri)
       
 Filter:
-       --key-to-hold "K1,K2..."        keywords to hold the file, "key1, key2..."
-       --key-to-burn "K1,K2..."        keywords to burn the file
-       --suffix-to-hold "K1,K2..."     suffix to hold the file
-       --suffix-to-burn "K1,K2..."     suffix to burn the file
-       --key-to-path-hold "K1,K2..."   keywords to hold the file by file's absolute path
-       --key-to-path-burn "K1,K2..."   keywords to burn the file by file's absolute path
+       --key-to-hold      "K1,K2..."    keywords to hold the file, "key1, key2..."
+       --key-to-burn      "K1,K2..."    keywords to burn the file
+       --suffix-to-hold   "K1,K2..."    suffix to hold the file
+       --suffix-to-burn   "K1,K2..."    suffix to burn the file
+       --key-to-path-hold "K1,K2..."    keywords to hold the file by file's absolute path
+       --key-to-path-burn "K1,K2..."    keywords to burn the file by file's absolute path
 
 \033[0;31mWarning\033[0m: 
        Do NOT leave blank after ',' for specifying more than 2 keywords, 
