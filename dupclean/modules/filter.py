@@ -169,7 +169,7 @@ class Filter(object):
 
         def _burn_path(path_to_burn: str):
             RM = 'rm -ri' if prompt else 'rm -rf'
-            cmd = f"""{RM} '{path_to_burn}'""" if not move_to_dir else f"""mv '{path_to_burn}' {move_to_dir}"""
+            cmd = f'''{RM} "{path_to_burn}"''' if not move_to_dir else f'''mv "{path_to_burn}" {move_to_dir}'''
             os.system(cmd)
 
         threads = [threading.Thread(target=_burn_path, args=(p,)) for p in paths_to_burn]
