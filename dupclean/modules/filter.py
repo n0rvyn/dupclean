@@ -169,6 +169,13 @@ class Filter(object):
 
         def _burn_path(path_to_burn: str):
             RM = 'rm -ri' if prompt else 'rm -rf'
+            # todo if path contains " ??? how to fix this?
+
+            if path_to_burn.startswith('-'):
+                RM = f"""{RM} --"""
+            if '"' in path_to_burn:  # path contains ", replace to \"
+                path_to_burn = path_to_burn.replace('"', '\\"')
+
             cmd = f'''{RM} "{path_to_burn}"''' if not move_to_dir else f'''mv "{path_to_burn}" {move_to_dir}'''
             os.system(cmd)
 
