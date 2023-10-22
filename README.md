@@ -12,7 +12,7 @@ A simple tool to delete duplicate files.
 - Linux
 
 ## Usage
-```bazaar
+```shell
 Usage: dupclean.py [action] [options] [filter] [path]
        dupclean.py [-h | --help]           display this help message and exit
 
